@@ -11,7 +11,7 @@ module.exports = class MediaWikiLanguages {
     static sets = null
 
     /**
-     * @param  {...string?} languages
+     * @param {...string?} languages
      */
     static async load(...languages) {
         if (!this.sets)
