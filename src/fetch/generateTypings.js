@@ -43,7 +43,7 @@ function generateTypings(value, name = null) {
             let type = name ? `interface ${name} {` : "{"
             type += sep
             type += Object.entries(entryTypes)
-                .map(([k, v]) => `${transform(k)}: ${v};`)
+                .map(([k, v]) => `${transform(k)}: ${v}`)
                 .join(sep)
             type += name ? "\n}" : " }"
             return type
