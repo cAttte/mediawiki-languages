@@ -1,0 +1,18 @@
+{
+    "name": "mediawiki-languages",
+    "version": "0.0.0",
+    "description": "Language data from the MediaWiki software, in JSON.",
+    "main": "src/index.js",
+    "scripts": {
+        "fetch": "node src/fetch/index"
+    },
+    "repository": "cAttte/mediawiki-languages.git",
+    "keywords": [
+        "mediawiki",
+        "i18n"
+    ],
+    "author": "catte_",
+    "license": "GPL-2.0-or-later",
+    "bugs": "https://github.com/cAttte/mediawiki-languages/issues",
+    "homepage": "https://github.com/cAttte/mediawiki-languages#readme"
+}
