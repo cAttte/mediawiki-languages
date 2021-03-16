@@ -1,6 +1,8 @@
 import LanguageData from "../../data/typings/LanguageData"
 import Language from "../../data/typings/Language"
 
+type Set = keyof LanguageData
+
 export default class MediaWikiLanguages {
     /**
      * Do not instantiate this class. All of its methods and properties are static.
@@ -28,6 +30,21 @@ export default class MediaWikiLanguages {
      * Load all languages.
      */
     static async load(): Promise<void>
+    /**
+     * Used internally by `load()`.
+     */
+    private static async loadSingle(language: Language, set: Set): Promise<void>
+    /**
+     * Get language data for a language.
+     * @param language The language to obtain
+     */
+    static get(language: Language): LanguageData
+    /**
+     * Get specific language data.
+     * @param language The language to obtain
+     * @param set The data set
+     */
+    static get<S extends Set>(language: Language, set: S): LanguageData[S]
 }
 
 export { LanguageData, Language }
