@@ -23,7 +23,7 @@ function generateTypings(value, name = null) {
     } else if (value instanceof Object) {
         const entryTypes = {}
         for (const [k, v] of Object.entries(value)) {
-            let vType = k === "fallback" ? "string" : generateTypings(v)
+            let vType = k === "fallback" ? "string | false" : generateTypings(v)
             entryTypes[k] = vType
         }
 
