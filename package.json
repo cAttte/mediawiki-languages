@@ -16,6 +16,7 @@
     "bugs": "https://github.com/cAttte/mediawiki-languages/issues",
     "homepage": "https://github.com/cAttte/mediawiki-languages#readme",
     "devDependencies": {
-        "@octokit/rest": "^18.3.5"
+        "@octokit/rest": "^18.3.5",
+        "php-parser": "^3.0.2"
     }
 }
