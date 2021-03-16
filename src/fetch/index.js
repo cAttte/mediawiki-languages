@@ -27,7 +27,6 @@ async function main() {
     for (const [set, blobs] of Object.entries(list)) {
         await fs.mkdir(`${__dirname}/../data/${set}`)
         for (const blob of blobs) {
-            if (!blob.name.endsWith("En.php")) continue
             const content = await fetchBlob(octokit, repo, blob.hash)
             const ext = blob.name.match(/\.(.*)$/)[1]
             const data = deserialize[ext](content)
