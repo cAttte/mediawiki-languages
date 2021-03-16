@@ -6,6 +6,7 @@ const { Octokit } = require("@octokit/rest")
  * @param {*} commit
  */
 module.exports = async function fetchList(octokit, repo, commit) {
+    console.log("Fetching blob list...")
     const treeResponse = await octokit.git.getTree({ ...repo, tree_sha: commit.tree.sha })
     const tree = treeResponse.data.tree
 
