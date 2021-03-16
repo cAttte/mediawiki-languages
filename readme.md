@@ -16,8 +16,32 @@ This will install the library interface, its typings, and the JSON data, which t
 
 ## Usage
 
-The module default-exports one class, `MediaWikiLanguages`. Its methods and fields are all static, which means you should not instantiate it, and use it like a regular object instead.
+The module default-exports one class, `MediaWikiLanguages`. Its methods and fields are all static, which means you should not instantiate it, and use it like a regular object/namespace instead.
 
-### load(...languages?: string[]): Promise<void>
+The actual TypeScript typings depend on each release of this package, as they are automatically generated. More generic types like `string` are provided here for convenience, but the real types are stricter.
 
-You may not want to load and parse almost 2 MB of data immediately, so no languages are loaded by default. You can use this method to load the languages. If no languages are provided, all of them will be loaded.
+-   [load()](#loadlanguages-string-promisevoid)
+-   [get()](#getlanguage-string-set-string-object)
+-   [path](#path-string)
+-   [data](#data-object)
+-   [sets](#sets-string)
+
+### load(...languages?: string[]): Promise<&ZeroWidthSpace;void>
+
+You may not want to load and parse almost 2 MB of data immediately, so no languages are loaded by default. You can use this method to load languages. If no languages are provided, all of them will be loaded.
+
+### get(language: string, set?: string): Object
+
+Get the language data for a language. You can also directly access the `data` property. If `set` is not provided, all sets will be returned within an object. Otherwise, only the specific data for that set will be returned.
+
+### path: string
+
+The absolute path pointing to the location of the JSON files. The directory structure is `(set)/(language).json`. You can use this if, for some reason, you want to manipulate the JSON files directly.
+
+### data: Object
+
+All of the language data, in format `{ language: { set: data } }`.
+
+### sets: string[]
+
+The available language data sets. Will be populated on the first `load()` execution. An array containing only `messages` for now.
