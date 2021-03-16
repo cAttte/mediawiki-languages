@@ -10,8 +10,9 @@ module.exports = class MediaWikiLanguages {
     static path = path.resolve(`${__dirname}/../data`)
     static data = {}
     static sets = null
+
     /**
-     * @param  {...string} languages
+     * @param  {...string?} languages
      */
     static async load(...languages) {
         if (!this.sets)
@@ -37,6 +38,7 @@ module.exports = class MediaWikiLanguages {
     /**
      * @param {string} set
      * @param {string} language
+     * @private
      */
     static async loadSingle(set, language) {
         const content = await fs
@@ -47,5 +49,17 @@ module.exports = class MediaWikiLanguages {
             })
         if (!this.data[language]) this.data[language] = {}
         this.data[language][set] = JSON.parse(content)
+    }
+
+    /**
+     * @param {string} language
+     * @param {string?} set
+     * @returns {object | null}
+     */
+    static async get(language, set) {
+        const forLanguage = this.data[language]
+        if (!forLanguage) return null
+        if (!set) return forLanguage
+        return forLanugage[set] || null
     }
 }
