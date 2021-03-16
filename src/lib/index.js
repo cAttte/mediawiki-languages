@@ -56,7 +56,7 @@ module.exports = class MediaWikiLanguages {
      * @param {string?} set
      * @returns {object | null}
      */
-    static async get(language, set) {
+    static get(language, set) {
         const forLanguage = this.data[language]
         if (!forLanguage) return null
         if (!set) return forLanguage
