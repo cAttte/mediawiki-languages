@@ -1,4 +1,3 @@
-/// <reference types="./typings/index" />
 const path = require("path")
 const fs = require("fs/promises")
 

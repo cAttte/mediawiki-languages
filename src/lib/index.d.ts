@@ -1,5 +1,5 @@
-import LanguageData from "../../data/typings/LanguageData"
-import Language from "../../data/typings/Language"
+import LanguageData from "../data/typings/LanguageData"
+import Language from "../data/typings/Language"
 
 type Set = keyof LanguageData
 
@@ -25,15 +25,15 @@ export default class MediaWikiLanguages {
      * Load one (or multiple) languages.
      * @param languages The language(s) to load
      */
-    static async load(...languages: Language[]): Promise<void>
+    static load(...languages: Language[]): Promise<void>
     /**
      * Load all languages.
      */
-    static async load(): Promise<void>
+    static load(): Promise<void>
     /**
      * Used internally by `load()`.
      */
-    private static async loadSingle(language: Language, set: Set): Promise<void>
+    private static loadSingle(language: Language, set: Set): Promise<void>
     /**
      * Get language data for a language.
      * @param language The language to obtain
