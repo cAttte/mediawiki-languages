@@ -29,7 +29,7 @@ function generateTypings(value, name = null) {
 
         const valueTypes = Object.values(entryTypes)
         const sameType = valueTypes[0]
-        if (valueTypes.every(type => type === sameType)) {
+        if (valueTypes.every(type => type === sameType) && !name) {
             const keyUnion = Object.keys(value)
                 .map(name => `"${name}"`)
                 .join(" | ")
