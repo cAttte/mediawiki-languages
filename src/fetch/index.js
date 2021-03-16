@@ -20,7 +20,7 @@ async function main() {
 
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
     const commit = await fetchCommit(octokit, repo)
-    const list = await fetchList(octokit, repo, commit)
+    const list = await fetchList(octokit, repo, commit.commit)
     /** @type {typeof list} */
     const englishData = {}
     /** @type {string[]} */
@@ -29,6 +29,7 @@ async function main() {
     for (const [set, blobs] of Object.entries(list)) {
         await fs.mkdir(`${__dirname}/../data/${set}`)
         for (const blob of blobs) {
+            if (!blob.name.endsWith("En.php")) continue
             const content = await fetchBlob(octokit, repo, blob.hash)
             const ext = blob.name.match(/\.(.*)$/)[1]
             const data = deserialize[ext](content)
@@ -62,6 +63,8 @@ async function main() {
 
     await fs.writeFile(`${__dirname}/../data/typings/Language.d.ts`, languageTypings)
     await fs.writeFile(`${__dirname}/../data/typings/LanguageData.d.ts`, dataTypings)
+
+    console.log(`\nUpdated data to ${repo.owner}/${repo.repo}@${commit.sha.slice(0, 8)}`)
 }
 
 main()
