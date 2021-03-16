@@ -2,8 +2,10 @@
  * This directory should only be executed in maintenance.
  * It is not part of the exposed interface, and depends on dev-dependencies.
  */
+const { promisify } = require("util")
 const fs = require("fs/promises")
-const rimraf = require("util").promisify(require("rimraf"))
+const exec = promisify(require("child_process").exec)
+const rimraf = promisify(require("rimraf"))
 const { Octokit } = require("@octokit/rest")
 const fetchCommit = require("./fetchCommit")
 const fetchList = require("./fetchList")
@@ -29,7 +31,6 @@ async function main() {
     for (const [set, blobs] of Object.entries(list)) {
         await fs.mkdir(`${__dirname}/../data/${set}`)
         for (const blob of blobs) {
-            if (!blob.name.endsWith("En.php")) continue
             const content = await fetchBlob(octokit, repo, blob.hash)
             const ext = blob.name.match(/\.(.*)$/)[1]
             const data = deserialize[ext](content)
@@ -64,7 +65,10 @@ async function main() {
     await fs.writeFile(`${__dirname}/../data/typings/Language.d.ts`, languageTypings)
     await fs.writeFile(`${__dirname}/../data/typings/LanguageData.d.ts`, dataTypings)
 
-    console.log(`\nUpdated data to ${repo.owner}/${repo.repo}@${commit.sha.slice(0, 8)}`)
+    const commitReference = `${repo.owner}/${repo.repo}@${commit.sha.slice(0, 8)}`
+    await exec("git add src/data")
+    await exec(`git commit -m "data: update to ${commitReference}"`)
+    console.log(`\nUpdated data to ${commitReference}.`)
 }
 
 main()
