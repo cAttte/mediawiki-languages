@@ -17,6 +17,7 @@
     "homepage": "https://github.com/cAttte/mediawiki-languages#readme",
     "devDependencies": {
         "@octokit/rest": "^18.3.5",
-        "php-parser": "^3.0.2"
+        "php-parser": "^3.0.2",
+        "rimraf": "^3.0.2"
     }
 }
