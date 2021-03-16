@@ -5,6 +5,7 @@
 const fs = require("fs/promises")
 const rimraf = require("util").promisify(require("rimraf"))
 const { Octokit } = require("@octokit/rest")
+const fetchCommit = require("./fetchCommit")
 const fetchList = require("./fetchList")
 const fetchBlob = require("./fetchBlob")
 const extractName = require("./extractName")
@@ -18,7 +19,8 @@ async function main() {
     await fs.mkdir(`${__dirname}/../data`)
 
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
-    const list = await fetchList(octokit, repo)
+    const commit = await fetchCommit(octokit, repo)
+    const list = await fetchList(octokit, repo, commit)
     /** @type {typeof list} */
     const englishData = {}
     /** @type {string[]} */
