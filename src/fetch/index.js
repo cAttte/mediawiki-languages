@@ -3,8 +3,7 @@
  * It is not part of the exposed interface, and depends on dev-dependencies.
  */
 const fs = require("fs/promises")
-const { promisify } = require("util")
-const rimraf = promisify(require("rimraf"))
+const rimraf = require("util").promisify(require("rimraf"))
 const { Octokit } = require("@octokit/rest")
 const fetchList = require("./fetchList")
 const fetchBlob = require("./fetchBlob")
@@ -13,14 +12,10 @@ const generateTypings = require("./generateTypings")
 const deserialize = { php: require("./deserialize/php") }
 
 const repo = { owner: "wikimedia", repo: "mediawiki" }
-const remk = async dir => {
-    await rimraf(`${__dirname}/${dir}`)
-    await fs.mkdir(`${__dirname}/${dir}`)
-}
 
 async function main() {
-    await remk("../data")
-    await remk("../typings")
+    //await rimraf(`${__dirname}/../data`)
+    //await fs.mkdir(`${__dirname}/../data`)
 
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
     const list = await fetchList(octokit, repo)
@@ -30,6 +25,7 @@ async function main() {
     for (const set of Object.keys(list)) await fs.mkdir(`${__dirname}/../data/${set}`)
     for (const [set, blobs] of Object.entries(list)) {
         for (const blob of blobs) {
+            if (!blob.name.endsWith("En.php")) continue
             const content = await fetchBlob(octokit, repo, blob.hash)
             const ext = blob.name.match(/\.(.*)$/)[1]
             const data = deserialize[ext](content)
@@ -41,13 +37,22 @@ async function main() {
         }
     }
 
+    console.log()
+    await fs.mkdir(`${__dirname}/../data/typings`)
+
+    let typingsIndex = "\nexport default interface LanguageData {"
     for (const [set, data] of Object.entries(englishData)) {
-        const interface = set[0].toUpperCase() + set.slice(1)
+        const interface = set[0].toUpperCase() + set.slice(1).toLowerCase()
         const typings = generateTypings(data, interface)
         const code = `export default ${typings}\n`
-        await fs.writeFile(`${__dirname}/../typings/${interface}.d.ts`, code)
+        await fs.writeFile(`${__dirname}/../data/typings/${interface}.d.ts`, code)
         console.log(`Generated typings for ${interface}.d.ts.`)
+        typingsIndex = `import ${interface} from "./${interface}"\n` + typingsIndex
+        typingsIndex += `    ${set}: ${interface}`
     }
+    typingsIndex += "}\n"
+
+    await fs.writeFile(`${__dirname}/../data/typings/index.d.ts`, typingsIndex)
 }
 
 main()
