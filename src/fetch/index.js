@@ -21,15 +21,20 @@ async function main() {
     const list = await fetchList(octokit, repo)
     /** @type {typeof list} */
     const englishData = {}
+    /** @type {string[]} */
+    const languages = []
 
     for (const [set, blobs] of Object.entries(list)) {
         await fs.mkdir(`${__dirname}/../data/${set}`)
         for (const blob of blobs) {
+            if (!blob.name.endsWith("En.php")) continue
             const content = await fetchBlob(octokit, repo, blob.hash)
             const ext = blob.name.match(/\.(.*)$/)[1]
             const data = deserialize[ext](content)
             const json = JSON.stringify(data)
             const language = extractName(blob.name)
+            if (!languages.includes(language)) languages.push(language)
+
             await fs.writeFile(`${__dirname}/../data/${set}/${language}.json`, json)
             console.log(`Fetched ${set}/${language}.json.`)
             if (language === "en") englishData[set] = data
@@ -51,6 +56,10 @@ async function main() {
     }
     dataTypings += "\n}\n"
 
+    const languageUnion = languages.map(language => `"${language}"`).join(" | ")
+    const languageTypings = `type Language = ${languageUnion}\nexport default Language\n`
+
+    await fs.writeFile(`${__dirname}/../data/typings/Language.d.ts`, languageTypings)
     await fs.writeFile(`${__dirname}/../data/typings/LanguageData.d.ts`, dataTypings)
 }
 
