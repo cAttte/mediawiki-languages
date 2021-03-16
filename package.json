@@ -14,5 +14,8 @@
     "author": "catte_",
     "license": "GPL-2.0-or-later",
     "bugs": "https://github.com/cAttte/mediawiki-languages/issues",
-    "homepage": "https://github.com/cAttte/mediawiki-languages#readme"
+    "homepage": "https://github.com/cAttte/mediawiki-languages#readme",
+    "devDependencies": {
+        "@octokit/rest": "^18.3.5"
+    }
 }
