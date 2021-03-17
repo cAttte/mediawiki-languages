@@ -53,12 +53,48 @@ module.exports = class MediaWikiLanguages {
     /**
      * @param {string} language
      * @param {string?} set
-     * @returns {object | null}
+     * @returns {Record<string, unknown> | null}
      */
     static get(language, set) {
         const forLanguage = this.data[language]
         if (!forLanguage) return null
         if (!set) return forLanguage
-        return forLanugage[set] || null
+        return forLanguage[set] || null
+    }
+
+    /**
+     * @param {string | Record<string, unknown>} data
+     * @param {boolean?} english
+     * @returns {Promise<Record<string, unknown>>}
+     */
+    static async fallback(data, english = true) {
+        await this.load("en")
+        const englishData = this.get("en", "messages")
+        if (typeof data === "string") {
+            await this.load(data)
+            data = this.get(data, "messages")
+        } else if (data.messages) {
+            data = data.messages
+        }
+
+        const ideal = data => {
+            for (const key in englishData) if (!data[key]) return false
+            return true
+        }
+
+        if (!ideal(data) && data.fallback) {
+            let fallbacks = data.fallback.split(", ")
+
+            for (const fallback of fallbacks) {
+                await this.load(fallback)
+                const fallbackData = this.get(fallback)
+                const fellbackFallbackData = await this.fallback(fallbackData)
+                data = Object.assign(fellbackFallbackData, data)
+                if (ideal(data)) break
+            }
+        }
+
+        if (english) data = Object.assign(englishData, data)
+        return data
     }
 }
