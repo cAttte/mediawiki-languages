@@ -22,6 +22,7 @@ The actual TypeScript typings depend on each release of this package, as they ar
 
 -   [load()](#loadlanguages-string-promisevoid)
 -   [get()](#getlanguage-string-set-string-object)
+-   [fallback()](#fallbackdata-string--object-english-boolean-object)
 -   [path](#path-string)
 -   [data](#data-object)
 -   [sets](#sets-string)
@@ -33,6 +34,10 @@ You may not want to load and parse almost 2 MB of data immediately, so no langua
 ### get(language: string, set?: string): Object
 
 Get the language data for a language. You can also directly access the `data` property. If `set` is not provided, all sets will be returned within an object. Otherwise, only the specific data for that set will be returned.
+
+### fallback(data: string | Object, english?: boolean): Object
+
+Fallback data from the `messages` set, to make sure the dataset is complete. It will merge the data with its fallbacks', its fallbacks' with its fallbacks' fallbacks', and so on. You can disable `english` to _not_ merge missing data with English at the lowest level, though all top-level fallback languages are complete anyway. The `data` parameter can be a language code, or custom language data with a `fallback` property.
 
 ### path: string
 
