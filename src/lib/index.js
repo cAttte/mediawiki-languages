@@ -37,17 +37,24 @@ module.exports = class MediaWikiLanguages {
     /**
      * @param {string} set
      * @param {string} language
+     * @returns {Object}
      * @private
      */
     static async loadSingle(set, language) {
+        if (this.data[language] && this.data[language][set])
+            return this.data[language][set]
+
         const content = await fs
             .readFile(`${this.path}/${set}/${language}.json`)
             .then(buffer => buffer.toString())
             .catch(() => {
                 throw new Error(`"${language}" is not a valid language.`)
             })
+        const data = JSON.parse(content)
+
         if (!this.data[language]) this.data[language] = {}
-        this.data[language][set] = JSON.parse(content)
+        this.data[language][set] = data
+        return data
     }
 
     /**
