@@ -27,9 +27,11 @@ The actual TypeScript typings depend on each release of this package, as they ar
 -   [data](#data-object)
 -   [sets](#sets-string)
 
-### load(...languages?: string[]): Promise<&ZeroWidthSpace;void>
+### load(...languages?: string[]): Promise<&ZeroWidthSpace;Object>
 
-You may not want to load and parse almost 2 MB of data immediately, so no languages are loaded by default. You can use this method to load languages. If no languages are provided, all of them will be loaded.
+You may not want to load and parse almost 2 MB of data immediately, so no languages are loaded by default. You can use this method to load languages. If no languages are provided, all of them will be loaded. This method will return the data, but also store it in `data`, which you can retrieve with `get()`.
+
+If multiple (or all) languages are provided, an object will be returned in the same structure as `data` (`{ language: { set: data } }`). If a single language is provided, only the data for that language will be returned (`{ set: data }`).
 
 ### get(language: string, set?: string): Object
 
