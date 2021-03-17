@@ -12,7 +12,7 @@ module.exports = class MediaWikiLanguages {
 
     /**
      * @param {...string?} languages
-     * @returns {Promise<Object>}
+     * @returns {Promise<Record<string, unknown>>}
      */
     static async load(...languages) {
         if (!this.sets)
@@ -43,7 +43,7 @@ module.exports = class MediaWikiLanguages {
     /**
      * @param {string} set
      * @param {string} language
-     * @returns {Object}
+     * @returns {Record<string, unknown>}
      * @private
      */
     static async loadSingle(set, language) {

@@ -60,7 +60,7 @@ export default class MediaWikiLanguages {
     static fallback(
         data: Language | LanguageData | LanguageData["messages"],
         english?: boolean
-    ): LanguageData["messages"]
+    ): Promises<LanguageData["messages"]>
 }
 
 export { LanguageData, Language }
