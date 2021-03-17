@@ -2,7 +2,7 @@
     "name": "mediawiki-languages",
     "version": "1.0.0",
     "description": "Language data from the MediaWiki software, in JSON.",
-    "main": "src/index.js",
+    "main": "src/lib/index.js",
     "scripts": {
         "fetch": "node src/fetch/index"
     },
