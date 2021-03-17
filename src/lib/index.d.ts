@@ -45,6 +45,15 @@ export default class MediaWikiLanguages {
      * @param set The data set
      */
     static get<S extends Set>(language: Language, set: S): LanguageData[S]
+    /**
+     * Fallback data from the `messages` set, to make sure the dataset is complete.
+     * @param data
+     * @param english
+     */
+    static fallback(
+        data: Language | LanguageData | LanguageData["messages"],
+        english?: boolean
+    ): LanguageData["messages"]
 }
 
 export { LanguageData, Language }
