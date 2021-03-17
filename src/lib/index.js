@@ -12,17 +12,22 @@ module.exports = class MediaWikiLanguages {
 
     /**
      * @param {...string?} languages
+     * @returns {Promise<Object>}
      */
     static async load(...languages) {
         if (!this.sets)
             this.sets = (await fs.readdir(this.path)).filter(d => d !== "typings")
 
         if (languages.length) {
+            const output = {}
             for (const set of this.sets) {
                 for (const language of languages) {
-                    await this.loadSingle(set, language)
+                    if (!output[language]) output[language] = {}
+                    output[language][set] = await this.loadSingle(set, language)
                 }
             }
+            if (languages.length === 1) return output[languages[0]]
+            return output
         } else {
             for (const set of this.sets) {
                 const files = await fs.readdir(`${this.path}/${set}`)
@@ -31,6 +36,7 @@ module.exports = class MediaWikiLanguages {
                     await this.loadSingle(set, language)
                 }
             }
+            return this.data
         }
     }
 
