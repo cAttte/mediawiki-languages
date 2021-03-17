@@ -1,6 +1,6 @@
 {
     "name": "mediawiki-languages",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "description": "Language data from the MediaWiki software, in JSON.",
     "main": "src/lib/index.js",
     "scripts": {
