@@ -22,14 +22,21 @@ export default class MediaWikiLanguages {
      */
     static sets?: Set[]
     /**
-     * Load one (or multiple) languages.
-     * @param languages The language(s) to load
+     * Load a language.
+     * @param language The language to load
      */
-    static load(...languages: Language[]): Promise<void>
+    static load(language: Language): Promise<LanguageData>
+    /**
+     * Load multiple languages.
+     * @param languages The languages to load
+     */
+    static load<L extends Language[]>(
+        ...languages: L
+    ): Promise<Record<L extends (infer LI)[] ? LI : never, LanguageData>>
     /**
      * Load all languages.
      */
-    static load(): Promise<void>
+    static load(): Promise<Record<Language, LanguageData>>
     /**
      * Used internally by `load()`.
      */
